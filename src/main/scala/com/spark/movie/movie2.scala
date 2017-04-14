@@ -29,7 +29,7 @@ object movie2 {
   def main(args: Array[String]): Unit = {
     val _split = "::"
 
-    val conf = new SparkConf().setAppName("basic").setMaster("local")
+    val conf = new SparkConf().setAppName("movie").setMaster("local")
     val sc = new SparkContext(conf)
     val users = sc.textFile("logs/ml-1m/users.dat")
     val movies = sc.textFile("logs/ml-1m/movies.dat")
