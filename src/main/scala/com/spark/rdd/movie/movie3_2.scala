@@ -1,4 +1,4 @@
-package com.spark.movie
+package com.spark.rdd.movie
 
 import org.apache.spark.{SparkConf, SparkContext}
 
