@@ -1,7 +1,7 @@
 package com.spark.ml
 
 import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer}
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SaveMode, SparkSession}
 
 /**
   * Created by AnLei on 2017/5/17.
@@ -36,6 +36,8 @@ object TfIdfExample {
     val rescaledData = idfModel.transform(featurizedData)
     rescaledData.select("label", "sentence", "words", "rawFeatures", "features").show()
     // $example off$
+
+    rescaledData.write.mode(SaveMode.Overwrite).json("output/TfIdf.json")
 
     spark.stop()
   }
