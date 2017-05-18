@@ -31,6 +31,8 @@ object Word2VecExample {
     val result = model.transform(documentDF)
     result.collect().foreach { case Row(text: Seq[_], features: Vector) =>
       println(s"Text: [${text.mkString(", ")}] => \nVector: $features\n") }
+
+    spark.stop()
   }
 
 }
