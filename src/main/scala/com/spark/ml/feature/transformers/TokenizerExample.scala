@@ -1,7 +1,7 @@
-package com.spark.ml
+package com.spark.ml.feature.transformers
 
-import org.apache.spark.sql.SparkSession
 import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 
 /**
@@ -11,7 +11,7 @@ object TokenizerExample {
 
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkSession.builder().master("local").appName("Word2VecExample").getOrCreate()
+    val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
     val sentenceDataFrame = spark.createDataFrame(Seq(
       (0, "Hi I heard about Spark"),

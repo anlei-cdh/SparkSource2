@@ -1,11 +1,10 @@
-package com.spark.ml
+package com.spark.ml.pipelines
 
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.ml.{Pipeline, PipelineModel}
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.feature.{HashingTF, Tokenizer}
 import org.apache.spark.ml.linalg.Vector
-import org.apache.spark.sql.Row
+import org.apache.spark.ml.{Pipeline, PipelineModel}
+import org.apache.spark.sql.{Row, SparkSession}
 
 /**
   * Created by AnLei on 2017/5/17.
@@ -14,7 +13,7 @@ object PipelineExample {
 
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkSession.builder().master("local").appName("PipelineExample").getOrCreate()
+    val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
     // $example on$
     // Prepare training documents from a list of (id, text, label) tuples.

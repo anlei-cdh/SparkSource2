@@ -1,7 +1,7 @@
-package com.spark.ml
+package com.spark.ml.feature.extractors
 
-import org.apache.spark.sql.SparkSession
 import org.apache.spark.ml.feature.{CountVectorizer, CountVectorizerModel}
+import org.apache.spark.sql.SparkSession
 
 /**
   * Created by AnLei on 2017/5/18.
@@ -10,7 +10,7 @@ object CountVectorizerExample {
 
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkSession.builder().master("local").appName("Word2VecExample").getOrCreate()
+    val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
     val df = spark.createDataFrame(Seq(
       (0, Array("a", "b", "c")),

@@ -1,4 +1,4 @@
-package com.spark.ml
+package com.spark.ml.feature.extractors
 
 import org.apache.spark.ml.feature.Word2Vec
 import org.apache.spark.ml.linalg.Vector
@@ -11,7 +11,7 @@ object Word2VecExample {
 
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkSession.builder().master("local").appName("Word2VecExample").getOrCreate()
+    val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
     // Input data: Each row is a bag of words from a sentence or document.
     val documentDF = spark.createDataFrame(Seq(

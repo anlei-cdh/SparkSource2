@@ -1,7 +1,7 @@
-package com.spark.ml
+package com.spark.ml.feature.extractors
 
 import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer}
-import org.apache.spark.sql.{SaveMode, SparkSession}
+import org.apache.spark.sql.SparkSession
 
 /**
   * Created by AnLei on 2017/5/17.
@@ -10,7 +10,7 @@ object TfIdfExample {
 
   def main(args: Array[String]) {
 
-    val spark = SparkSession.builder().master("local").appName("TfIdfExample").getOrCreate()
+    val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
     val sentenceData = spark.createDataFrame(Seq(
       (0.0, "Hi I heard about Spark"),

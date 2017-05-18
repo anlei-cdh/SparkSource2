@@ -10,7 +10,7 @@ object NGramExample {
 
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkSession.builder().master("local").appName("NGramExample").getOrCreate()
+    val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
     // $example on$
     val wordDataFrame = spark.createDataFrame(Seq(
