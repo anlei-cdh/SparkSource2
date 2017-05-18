@@ -1,4 +1,4 @@
-package com.spark.ml
+package com.spark.ml.feature.transformers
 
 import org.apache.spark.ml.feature.{OneHotEncoder, StringIndexer}
 import org.apache.spark.sql.SparkSession
