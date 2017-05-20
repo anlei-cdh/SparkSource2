@@ -10,7 +10,7 @@ object OneHotEncoderExample {
 
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkSession.builder().master("local").appName("OneHotEncoderExample").getOrCreate()
+    val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
     // $example on$
     val df = spark.createDataFrame(Seq(
