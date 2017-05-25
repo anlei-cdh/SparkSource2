@@ -5,6 +5,11 @@ import org.apache.spark.sql.SparkSession
 
 /**
   * Created by AnLei on 2017/5/17.
+  *
+  * Hi I heard about Spark
+  * Tokenizer(transform) -> [hi, i, heard, about, spark]
+  * HashingTF(transform) -> (20,[0,5,9,17],[1.0,1.0,1.0,2.0])
+  * IDF(fit) -> (20,[0,5,9,17],[0.6931471805599453,0.6931471805599453,0.28768207245178085,1.3862943611198906])
   */
 object TfIdfExample {
 
@@ -32,6 +37,8 @@ object TfIdfExample {
 
     val rescaledData = idfModel.transform(featurizedData)
     rescaledData.select("label", "features").show()
+
+    rescaledData.show(false)
 
     spark.stop()
   }
