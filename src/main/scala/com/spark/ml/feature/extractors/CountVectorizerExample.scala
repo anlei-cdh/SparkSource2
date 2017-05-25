@@ -5,6 +5,9 @@ import org.apache.spark.sql.SparkSession
 
 /**
   * Created by AnLei on 2017/5/18.
+  *
+  * [a, b, c]
+  * CountVectorizer(fit) -> (3,[0,1,2],[1.0,1.0,1.0])
   */
 object CountVectorizerExample {
 
