@@ -6,6 +6,9 @@ import org.apache.spark.sql.{Row, SparkSession}
 
 /**
   * Created by AnLei on 2017/5/18.
+  *
+  * [Hi, I, heard, about, Spark]
+  * Word2Vec(fit) -> [-0.028139343485236168,0.04554025698453188,-0.013317196490243079]
   */
 object Word2VecExample {
 

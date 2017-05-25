@@ -7,6 +7,7 @@ import org.apache.spark.sql.{Row, SparkSession}
 
 /**
   * Created by AnLei on 2017/5/17.
+  * 逻辑回归 - 非管道
   */
 object PipelineWithoutExample {
 
