@@ -13,7 +13,7 @@ object RecoServer {
     webServer.setHandler(context)
     val jerseyServlet: ServletHolder = context.addServlet(classOf[ServletContainer], "/*")
     jerseyServlet.setInitOrder(0)
-    jerseyServlet.setInitParameter("jersey.config.server.provider.packages", "org.training.spark.reco.webservice")
+    jerseyServlet.setInitParameter("jersey.config.server.provider.packages", "com.spark.recommend.webservice")
     try {
       println("Web Server started ......")
       webServer.start
