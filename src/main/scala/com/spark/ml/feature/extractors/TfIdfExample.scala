@@ -6,6 +6,7 @@ import org.apache.spark.sql.SparkSession
 /**
   * Created by AnLei on 2017/5/17.
   *
+  * 文本特征提取
   * Hi I heard about Spark
   * Tokenizer(transform) -> [hi, i, heard, about, spark]
   * HashingTF(transform) -> (20,[0,5,9,17],[1.0,1.0,1.0,2.0])
