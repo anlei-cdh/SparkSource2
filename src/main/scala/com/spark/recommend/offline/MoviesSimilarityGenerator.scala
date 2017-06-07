@@ -9,7 +9,7 @@ import org.training.spark.proto.Spark.{ItemList, ItemSimilarities, ItemSimilarit
 object MoviesSimilarityGenerator {
   def main(args: Array[String]) {
     var masterUrl = "local[4]"
-    var dataPath = "logs/ml-1m/ratings.dat"
+    var dataPath = "logs/ml-1m/ratings10000.dat"
     if (args.length > 0) {
       masterUrl = args(0)
     } else if (args.length > 1) {
@@ -51,8 +51,8 @@ object MoviesSimilarityGenerator {
 
     /**
       * 行矩阵
-      * (userid,(size,[movieid,movieid2..],[rating,rating2...]))
-      * (userid2,(size,[movieid,movieid2..],[rating,rating2...]))
+      * (size,[movieid,movieid2..],[rating,rating2...])
+      * (size,[movieid,movieid2..],[rating,rating2...])
       * ...
       */
     val mat = new RowMatrix(rowRdd)
@@ -62,13 +62,26 @@ object MoviesSimilarityGenerator {
     // Compute similar columns perfectly, with brute force.
     /**
       * 计算每列之间相似度，采用抽样方法进行计算，参数为阈值
+      * MatrixEntry(movieid,movieid2,相似度)
+      * MatrixEntry(movieid,movieid2,相似度)
+      * ...
       */
     val similarities = mat.columnSimilarities(0.1)
 
     // Save movie-movie similarity to redis
     similarities.entries.map { case MatrixEntry(i, j, u) =>
+      /**
+        * (movieid,(movieid2,相似度))
+        * (movieid,(movieid2,相似度))
+        * ...
+        */
       (i, (j, u))
     }.groupByKey(2).map { kv =>
+      /**
+        * (movieid,Map(movieid2 -> 相似度, movieid3 -> 相似度, ...)top20
+        * (movieid,Map(movieid2 -> 相似度, movieid3 -> 相似度, ...)top20
+        * ...
+        */
       (kv._1, kv._2.toSeq.sortWith(_._2 > _._2).take(20).toMap)
     }.mapPartitions { iter =>
       val jedis = RedisClient.pool.getResource
