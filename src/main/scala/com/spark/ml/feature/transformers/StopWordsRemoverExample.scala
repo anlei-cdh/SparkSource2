@@ -6,6 +6,7 @@ import org.apache.spark.ml.feature.StopWordsRemover
 /**
   * Created by AnLei on 2017/5/18.
   *
+  * 去除停用词
   * [I, saw, the, red, balloon]
   * StopWordsRemover(transform) -> [saw, red, balloon]
   */
@@ -25,6 +26,8 @@ object StopWordsRemoverExample {
     )).toDF("id", "raw")
 
     remover.transform(dataSet).show(false)
+
+    spark.stop()
   }
 
 }

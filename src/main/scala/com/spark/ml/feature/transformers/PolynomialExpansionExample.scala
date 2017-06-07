@@ -6,6 +6,11 @@ import org.apache.spark.ml.linalg.Vectors
 
 /**
   * Created by AnLei on 2017/5/18.
+  *
+  * 多项式核转换
+  * [2.0,1.0]
+  * PolynomialExpansion(transform) -> [2.0,4.0,8.0,1.0,2.0,4.0,1.0,2.0,1.0]
+  *
   */
 object PolynomialExpansionExample {
 

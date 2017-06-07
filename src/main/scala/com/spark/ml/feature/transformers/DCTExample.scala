@@ -6,6 +6,11 @@ import org.apache.spark.ml.linalg.Vectors
 
 /**
   * Created by AnLei on 2017/5/18.
+  *
+  * 离散余弦变换
+  * [0.0,1.0,-2.0,3.0]
+  * DCT(transform) -> [1.0,-1.1480502970952693,2.0000000000000004,-2.7716385975338604]
+  *
   */
 object DCTExample {
 
@@ -26,7 +31,7 @@ object DCTExample {
       .setInverse(false)
 
     val dctDf = dct.transform(df)
-    dctDf.select("featuresDCT").show(false)
+    dctDf.select("features", "featuresDCT").show(false)
   }
 
 }

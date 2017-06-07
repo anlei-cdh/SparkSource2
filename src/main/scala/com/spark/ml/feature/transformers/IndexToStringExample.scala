@@ -6,6 +6,11 @@ import org.apache.spark.ml.feature.{IndexToString, StringIndexer}
 
 /**
   * Created by AnLei on 2017/5/18.
+  *
+  * 索引返回字符串
+  * [0.0 | 2.0 | 1.0 | 0.0 | 0.0 | 1.0]
+  * IndexToString(transform) -> [a | b | c | a | a | c]
+  *
   */
 object IndexToStringExample {
 

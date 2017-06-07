@@ -5,6 +5,10 @@ import org.apache.spark.sql.SparkSession
 
 /**
   * Created by AnLei on 2017/5/16.
+  *
+  * 相邻词搭配
+  * [Hi, I, heard, about, Spark]
+  * NGram(transform) -> [Hi I, I heard, heard about, about Spark]
   */
 object NGramExample {
 

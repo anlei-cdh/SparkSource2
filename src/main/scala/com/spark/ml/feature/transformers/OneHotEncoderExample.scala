@@ -5,6 +5,12 @@ import org.apache.spark.sql.SparkSession
 
 /**
   * Created by AnLei on 2017/5/17.
+  *
+  * 独热编码
+  * [a | b | c | a | a | c]
+  * OneHotEncoder(transform) -> [(2,[0],[1.0]) | (2,[],[]) | (2,[1],[1.0]) |
+  *                             (2,[0],[1.0]) | (2,[0],[1.0]) | (2,[1],[1.0])]
+  *
   */
 object OneHotEncoderExample {
 

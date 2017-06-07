@@ -5,6 +5,10 @@ import org.apache.spark.ml.feature.Binarizer
 
 /**
   * Created by AnLei on 2017/5/18.
+  *
+  * 二值化
+  * [0.1 | 0.8 | 0.2 | 10.1]
+  * Binarizer(transform) -> [0.0 | 1.0 | 0.0 | 1.0]
   */
 object BinarizerExample {
 
@@ -12,7 +16,7 @@ object BinarizerExample {
 
     val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
-    val data = Array((0, 0.1), (1, 0.8), (2, 0.2))
+    val data = Array((0, 0.1), (1, 0.8), (2, 0.2), (3, 10.1))
     val dataFrame = spark.createDataFrame(data).toDF("id", "feature")
 
     val binarizer: Binarizer = new Binarizer()

@@ -4,6 +4,11 @@ import org.apache.spark.ml.feature.StringIndexer
 import org.apache.spark.sql.SparkSession
 /**
   * Created by AnLei on 2017/5/18.
+  *
+  * 字符串索引
+  * [a | b | c | a | a | c]
+  * StringIndexer(fit) -> [0.0 | 2.0 | 1.0 | 0.0 | 0.0 | 1.0]
+  *
   */
 object StringIndexerExample {
 

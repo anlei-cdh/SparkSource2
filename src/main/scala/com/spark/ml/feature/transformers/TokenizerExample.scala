@@ -7,6 +7,7 @@ import org.apache.spark.sql.functions._
 /**
   * Created by AnLei on 2017/5/18.
   *
+  * 分词器
   * Logistic,regression,models,are,neat
   * RegexTokenizer(transform) -> [logistic, regression, models, are, neat]
   *
@@ -38,6 +39,8 @@ object TokenizerExample {
     val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
     regexTokenized.select("sentence", "words")
       .withColumn("tokens", countTokens(col("words"))).show(false)
+
+    spark.stop()
   }
 
 }
