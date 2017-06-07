@@ -24,23 +24,45 @@ object MoviesSimilarityGenerator {
     val threshold = 0.1
 
     // Load and parse the data file.
+    /**
+      * (userid,movieid,rating)
+      */
     val rows = sc.textFile(inputFile).map(_.split("::")).map { p =>
       (p(0).toLong, p(1).toInt, p(2).toDouble)
     }
 
+    /**
+      * size
+      */
     val maxMovieId = rows.map(_._2).max() + 1
 
     val rowRdd = rows.map { p =>
+      /**
+        * (userid,(movieid,rating))
+        */
       (p._1, (p._2, p._3))
     }.groupByKey().map { kv =>
+      /**
+        * 稀疏向量
+        * size,[movieid,movieid2..],[rating,rating2...]
+        */
       Vectors.sparse(maxMovieId, kv._2.toSeq)
     }.cache()
 
+    /**
+      * 行矩阵
+      * (userid,(size,[movieid,movieid2..],[rating,rating2...]))
+      * (userid2,(size,[movieid,movieid2..],[rating,rating2...]))
+      * ...
+      */
     val mat = new RowMatrix(rowRdd)
 
     println(s"mat row/col number: ${mat.numRows()}, ${mat.numCols()}")
 
     // Compute similar columns perfectly, with brute force.
+    /**
+      * 计算每列之间相似度，采用抽样方法进行计算，参数为阈值
+      */
     val similarities = mat.columnSimilarities(0.1)
 
     // Save movie-movie similarity to redis
