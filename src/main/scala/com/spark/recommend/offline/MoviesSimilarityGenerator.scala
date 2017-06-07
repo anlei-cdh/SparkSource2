@@ -84,6 +84,16 @@ object MoviesSimilarityGenerator {
         */
       (kv._1, kv._2.toSeq.sortWith(_._2 > _._2).take(20).toMap)
     }.mapPartitions { iter =>
+      /**
+        * key:II:2134,value:itemSimilarites {
+        *   itemId: 2403
+        *   similarity: 0.5648457825594065
+        * }
+        * itemSimilarites {
+        *   itemId: 2520
+        *   similarity: 0.6575959492214292
+        * }
+        */
       val jedis = RedisClient.pool.getResource
       iter.map { case (i, j) =>
         val key = ("II:%d").format(i)
@@ -101,8 +111,21 @@ object MoviesSimilarityGenerator {
 
     // Save user-movie similarity to redis
     rows.map { case (i, j, k) =>
+      /**
+        * (userid,movieid)
+        */
       (i, j)
     }.groupByKey(2).mapPartitions { iter =>
+      /**
+        * key:UI:68,value:itemIds: 3863
+        * itemIds: 1256
+        * itemIds: 2997
+        * itemIds: 1
+        * itemIds: 2064
+        * itemIds: 1265
+        * itemIds: 1197
+        * itemIds: 1270
+        */
       val jedis = RedisClient.pool.getResource
       iter.map { case (i, j) =>
         val key = ("UI:%d").format(i)
