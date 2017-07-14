@@ -5,6 +5,7 @@ import org.apache.spark.sql.SparkSession
 
 /**
   * Created by AnLei on 2017/5/17.
+  * KMeans
   */
 object KMeansExample {
   def main(args: Array[String]): Unit = {
