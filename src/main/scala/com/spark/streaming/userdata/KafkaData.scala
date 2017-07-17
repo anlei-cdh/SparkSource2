@@ -1,12 +1,11 @@
-package com.spark.streaming
+package com.spark.streaming.userdata
 
 import java.util.Properties
 
+import com.alibaba.fastjson.JSONObject
 import com.spark.config.Config
 import kafka.javaapi.producer.Producer
-import kafka.producer.KeyedMessage
-import kafka.producer.ProducerConfig
-import com.alibaba.fastjson.JSONObject
+import kafka.producer.{KeyedMessage, ProducerConfig}
 
 import scala.util.Random
 

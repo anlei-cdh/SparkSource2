@@ -1,12 +1,12 @@
-package com.spark.streaming
+package com.spark.streaming.userdata
 
 import com.alibaba.fastjson.JSON
 import com.spark.config.Config
 import com.spark.util.RedisClient
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.kafka.KafkaUtils
+import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
   * Created by AnLei on 2017/5/15.
