@@ -5,4 +5,8 @@ package com.spark.streaming
   */
 object KafkaProducer {
 
+  def main(args: Array[String]): Unit = {
+
+  }
+
 }

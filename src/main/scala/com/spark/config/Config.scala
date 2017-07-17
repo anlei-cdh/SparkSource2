@@ -5,7 +5,7 @@ package com.spark.config
   */
 object Config {
   val KAFKA_BROKERS: String = "ha01:9092,ha02:9092,ha03:9092"
-  val KAFKA_TOPIC: String = "user"
+  val KAFKA_USER_TOPIC: String = "user"
   val KAFKA_RECO_TOPIC: String = "reco6"
 
   val REDIS_SERVER: String = "ha01"

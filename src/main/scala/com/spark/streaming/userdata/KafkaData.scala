@@ -40,7 +40,7 @@ object KafkaData {
   }
 
   def main(args: Array[String]): Unit = {
-    val topic = Config.KAFKA_TOPIC
+    val topic = Config.KAFKA_USER_TOPIC
     val brokers = Config.KAFKA_BROKERS
     val props = new Properties()
     props.put("metadata.broker.list", brokers)

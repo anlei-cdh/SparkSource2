@@ -22,7 +22,7 @@ object UserDataStreaming {
     val ssc = new StreamingContext(conf, Seconds(5))
 
     // Kafka configurations
-    val topics = Config.KAFKA_TOPIC.split("\\,").toSet
+    val topics = Config.KAFKA_USER_TOPIC.split("\\,").toSet
     println(s"Topics: ${topics}.")
 
     val brokers = Config.KAFKA_BROKERS
