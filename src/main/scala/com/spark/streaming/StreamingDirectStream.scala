@@ -11,7 +11,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 /**
   * Created by AnLei on 2017/7/17.
   */
-object StreamingDemo {
+object StreamingDirectStream {
 
   def main(args: Array[String]): Unit = {
     val topic = Config.KAFKA_TOPIC
