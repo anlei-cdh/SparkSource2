@@ -32,7 +32,7 @@ object StreamingDemo {
       Some(data)
     })
 
-    val counts = events.map(x => (x.getString("id"), x.getLong("count"))).reduceByKey(_ + _)
+    val counts = events.map(x => (x.getString("name"), x.getLong("count"))).reduceByKey(_ + _)
 
     counts.foreachRDD(rdd => {
       rdd.foreachPartition(records => {
