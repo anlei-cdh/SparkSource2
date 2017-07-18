@@ -16,6 +16,7 @@ object StreamingDirectStream {
   def main(args: Array[String]): Unit = {
     val topic = Config.KAFKA_TOPIC
     val brokers = Config.KAFKA_BROKERS
+    val group = Config.KAFKA_GROUP
 
     val conf = new SparkConf().setAppName("StreamingDemo").setMaster("local[*]")
     val ssc = new StreamingContext(conf, Seconds(5))
@@ -23,8 +24,10 @@ object StreamingDirectStream {
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
       "auto.offset.reset" -> "largest",
-      "group.id" -> "StreamingDemo")
-    val kafkaStream = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, Set(topic))
+      "group.id" -> group)
+
+    val topicsSet = topic.split(",").toSet
+    val kafkaStream = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topicsSet)
 
     val events = kafkaStream.flatMap(line => {
       println(s"line ${line}.")
