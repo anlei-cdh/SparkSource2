@@ -9,6 +9,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
   * Created by AnLei on 2017/7/17.
+  *
   */
 object StreamingStream {
 
