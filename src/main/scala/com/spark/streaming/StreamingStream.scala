@@ -18,9 +18,9 @@ object StreamingStream {
     val zkQuorum = Config.ZOOKEEPER_QUORUM
     val group = Config.KAFKA_GROUP
 
-    val conf = new SparkConf().setAppName("StreamingDemo").setMaster("local[*]")
+    val conf = new SparkConf().setAppName("StreamingStream").setMaster("local[*]")
     val ssc = new StreamingContext(conf, Seconds(5))
-    ssc.checkpoint("checkpoint")
+    // ssc.checkpoint("checkpoint")
 
     val numThreads: Int = 2
     val topicMap = topic.split(",").map((_, numThreads)).toMap

@@ -18,7 +18,7 @@ object StreamingDirectStream {
     val brokers = Config.KAFKA_BROKERS
     val group = Config.KAFKA_GROUP
 
-    val conf = new SparkConf().setAppName("StreamingDemo").setMaster("local[*]")
+    val conf = new SparkConf().setAppName("StreamingDirectStream").setMaster("local[*]")
     val ssc = new StreamingContext(conf, Seconds(5))
     val kafkaParams = Map[String, String](
       "metadata.broker.list" -> brokers,
