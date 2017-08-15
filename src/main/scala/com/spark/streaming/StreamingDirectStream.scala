@@ -35,7 +35,9 @@ object StreamingDirectStream {
       Some(data)
     })
 
-    val counts = events.map(x => (x.getString("name"), x.getLong("count"))).reduceByKey(_ + _)
+    val dStream = events.map(x => (x.getString("name"), x.getLong("count").toInt))
+
+    val counts = dStream.reduceByKey(_+_)
 
     counts.foreachRDD(rdd => {
       rdd.foreachPartition(records => {

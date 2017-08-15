@@ -5,12 +5,12 @@ import com.spark.config.Config
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils
-import org.apache.spark.streaming.{Seconds, State, StateSpec, StreamingContext}
+import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
   * Created by AnLei on 2017/7/17.
   */
-object StreamingDirectStreamState {
+object StreamingDirectStreamWindow {
 
   def main(args: Array[String]): Unit = {
     val topic = Config.KAFKA_TOPIC
@@ -19,8 +19,6 @@ object StreamingDirectStreamState {
 
     val conf = new SparkConf().setAppName("StreamingDirectStream").setMaster("local[*]")
     val ssc = new StreamingContext(conf, Seconds(5))
-    ssc.checkpoint("checkpoint")
-
     val kafkaParams = Map[String, String](
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
@@ -37,36 +35,8 @@ object StreamingDirectStreamState {
     })
 
     val dStream = events.map(x => (x.getString("name"), x.getLong("count").toInt))
-
-    /**
-      * updateStateByKey
-      */
-//    val updateFunc = (currValues: Seq[Int], state: Option[Int]) => {
-//      val currentCount = currValues.foldLeft(0)(_ + _)
-//      // val currentCount = currValues.sum
-//
-//      val previousCount = state.getOrElse(0)
-//      Some(currentCount + previousCount)
-//    }
-//    val counts = dStream.updateStateByKey(updateFunc)
-
-    /**
-      * mapWithState
-      */
-    val initialRDD = ssc.sparkContext.parallelize(List[(String, Int)]())
-    val mappingFunc = (word: String, one: Option[Int], state: State[Int]) => {
-      val sum = one.getOrElse(0) + state.getOption.getOrElse(0)
-      val output = (word, sum)
-      state.update(sum)
-      output
-    }
-    val counts = dStream.mapWithState(StateSpec.function(mappingFunc).initialState(initialRDD)).reduceByKey((m,n) => {
-      if(m > n) {
-        m
-      } else {
-        n
-      }
-    })
+    // 窗口长度和滑动间隔(必须是微批处理间隔的整数倍) 每隔5秒统计最近10秒的次数
+    val counts = dStream.reduceByKeyAndWindow((a:Int, b:Int) => (a + b), Seconds(10), Seconds(5))
 
     counts.foreachRDD(rdd => {
       rdd.foreachPartition(records => {
