@@ -1,5 +1,7 @@
 package com.spark.ml.classification
 
+import org.apache.spark.sql.functions.max
+import org.apache.spark.ml.classification.{BinaryLogisticRegressionSummary, LogisticRegression}
 import org.apache.spark.sql.SparkSession
 
 /**
