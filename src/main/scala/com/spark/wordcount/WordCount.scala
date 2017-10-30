@@ -13,6 +13,7 @@ object WordCount {
     val sc = new SparkContext(conf)
 
     val data = sc.parallelize(List("hadoop","hdfs","mapreduce","hbase","spark","hadoop","hdfs","hbase","storm","hdfs","storm","hbase"))
+    // val data = sc.textFile("logs/wordcount.log")
     val result = data.flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _)
 
     result.foreach(println(_))
