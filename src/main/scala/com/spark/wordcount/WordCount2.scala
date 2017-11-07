@@ -9,6 +9,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 object WordCount2 {
 
   def main(args: Array[String]): Unit = {
+
     val conf = new SparkConf().setAppName(this.getClass.getSimpleName()).setMaster("local")
     val sc = new SparkContext(conf)
     val log = sc.textFile("logs/wordcount.log")
