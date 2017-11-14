@@ -1,0 +1,18 @@
+package com.spark.ml.classification
+
+import org.apache.spark.sql.functions.max
+import org.apache.spark.ml.classification.{BinaryLogisticRegressionSummary, LogisticRegression}
+import org.apache.spark.sql.SparkSession
+
+/**
+  * Created by AnLei on 2017/8/4.
+  */
+object LogisticRegression {
+
+  def main(args: Array[String]): Unit = {
+
+    val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
+
+  }
+
+}
