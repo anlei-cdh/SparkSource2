@@ -1,11 +1,11 @@
 package com.spark.ml.classification
 
-import org.apache.spark.sql.functions.max
-import org.apache.spark.ml.classification.{BinaryLogisticRegressionSummary, LogisticRegression}
 import org.apache.spark.sql.SparkSession
 
 /**
-  * Created by AnLei on 2017/8/4.
+  * Created by AnLei on 2017/11/14.
+  *
+  * LogisticRegression
   */
 object LogisticRegression {
 

@@ -3,7 +3,7 @@ package com.spark.ml.recommendation
 import org.apache.spark.sql.SparkSession
 
 /**
-  * Created by AnLei on 2017/7/14.
+  * Created by AnLei on 2017/11/14.
   *
   * CollaborativeFiltering
   */

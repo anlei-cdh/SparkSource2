@@ -2,6 +2,11 @@ package com.spark.ml.clustering
 
 import org.apache.spark.sql.SparkSession
 
+/**
+  * Created by AnLei on 2017/11/14.
+  *
+  * Clustering
+  */
 object Clustering {
 
   def main(args: Array[String]): Unit = {
