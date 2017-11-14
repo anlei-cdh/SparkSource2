@@ -1,17 +1,13 @@
-package com.spark.ml
+package com.spark.ml.regression
 
 import org.apache.spark.sql.SparkSession
 
-/**
-  * Created by AnLei on 2017/7/14.
-  *
-  * CollaborativeFiltering
-  */
-object CollaborativeFiltering {
+object LinearRegression {
 
   def main(args: Array[String]): Unit = {
 
     val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
+
   }
 
 }

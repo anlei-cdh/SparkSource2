@@ -1,8 +1,13 @@
-package com.spark.ml.classification
+package com.spark.ml.recommendation
 
 import org.apache.spark.sql.SparkSession
 
-object LinearRegression {
+/**
+  * Created by AnLei on 2017/7/14.
+  *
+  * CollaborativeFiltering
+  */
+object CollaborativeFiltering {
 
   def main(args: Array[String]): Unit = {
 
