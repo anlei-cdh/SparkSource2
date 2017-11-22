@@ -29,8 +29,8 @@ object LogisticRegression {
       .setMaxIter(10)
       .setRegParam(0.3)
       .setElasticNetParam(0.8)
-//    val lrModel = lr.fit(training)
-//    lr.fit(training).save(path)
+
+    lr.fit(training).write.overwrite().save(path)
 
     val testData = spark.createDataFrame(Seq(
       (0.0, "Hi I'd like spark"),
