@@ -19,12 +19,12 @@ object LogisticRegression {
     val path = "model/lr"
     val numFeatures = 10000
 
-    val trainingData = spark.createDataFrame(Seq(
+    val trainingDataFrame = spark.createDataFrame(Seq(
       (1, "Hi I heard about Spark", 0.0),
       (2, "I wish Java could use case classes", 0.0),
       (3, "Logistic regression models are neat", 1.0)
-    )).toDF("id", "text","label")
-    val training = MLUtils.idfFeatures(trainingData, numFeatures).select("label", "features")
+    )).toDF("id", "text", "label")
+    val training = MLUtils.idfFeatures(trainingDataFrame, numFeatures).select("label", "features")
 
     val lr = new LogisticRegression()
       .setMaxIter(10)
@@ -32,16 +32,17 @@ object LogisticRegression {
 
     lr.fit(training).write.overwrite().save(path)
 
-    val testData = spark.createDataFrame(Seq(
+    val testDataFrame = spark.createDataFrame(Seq(
       (1, "Hi I'd like spark"),
       (2, "I wish Java could use goland"),
       (3, "Linear regression models are neat"),
       (4, "Logistic regression models are neat")
     )).toDF("id", "text")
-    val test = MLUtils.idfFeatures(testData, numFeatures).select("features")
+    val test = MLUtils.idfFeatures(testDataFrame, numFeatures).select("features")
 
     val lrModel = LogisticRegressionModel.load(path)
     val result = lrModel.transform(test)
+
     result.show(false)
 
     spark.stop()

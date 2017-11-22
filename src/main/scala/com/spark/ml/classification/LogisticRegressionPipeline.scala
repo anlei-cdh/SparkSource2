@@ -50,8 +50,8 @@ object LogisticRegressionPipeline {
       (4, "Logistic regression models are neat")
     )).toDF("id", "text")
 
-    val lrModel = PipelineModel.load(path)
-    val result = lrModel.transform(testData)
+    val pipelineModel = PipelineModel.load(path)
+    val result = pipelineModel.transform(testData)
     result.show(false)
 
     spark.stop()
