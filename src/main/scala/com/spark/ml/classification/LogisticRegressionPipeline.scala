@@ -1,9 +1,8 @@
 package com.spark.ml.classification
 
-import com.spark.ml.util.MLUtils
 import org.apache.spark.ml.{Pipeline, PipelineModel}
-import org.apache.spark.ml.classification.{LogisticRegression, LogisticRegressionModel}
-import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer}
+import org.apache.spark.ml.classification.{LogisticRegression}
+import org.apache.spark.ml.feature.{HashingTF, Tokenizer}
 import org.apache.spark.sql.SparkSession
 
 object LogisticRegressionPipeline {
@@ -28,11 +27,11 @@ object LogisticRegressionPipeline {
     /**
       * 向量化
       */
-    val hashingTF = new HashingTF().setInputCol(tokenizer.getOutputCol).setOutputCol("rawFeatures").setNumFeatures(numFeatures)
+    val hashingTF = new HashingTF().setInputCol(tokenizer.getOutputCol).setOutputCol("features").setNumFeatures(numFeatures)
     /**
-      * TF-IDF
+      * TF-IDF 管道使用这个特征不准确
       */
-    val idf = new IDF().setInputCol(hashingTF.getOutputCol).setOutputCol("features")
+    // val idf = new IDF().setInputCol(hashingTF.getOutputCol).setOutputCol("features")
     /**
       * 逻辑回归
       */
@@ -40,7 +39,7 @@ object LogisticRegressionPipeline {
     /**
       * 管道
       */
-    val pipeline = new Pipeline().setStages(Array(tokenizer, hashingTF, idf, lr))
+    val pipeline = new Pipeline().setStages(Array(tokenizer, hashingTF, lr))
     pipeline.fit(trainingData).write.overwrite().save(path)
 
     val testData = spark.createDataFrame(Seq(
