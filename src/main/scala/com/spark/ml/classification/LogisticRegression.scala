@@ -17,28 +17,28 @@ object LogisticRegression {
     val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
     val path = "model/lr"
+    val numFeatures = 10000
 
     val trainingData = spark.createDataFrame(Seq(
-      (0.0, "Hi I heard about Spark"),
-      (0.0, "I wish Java could use case classes"),
-      (1.0, "Logistic regression models are neat")
-    )).toDF("label", "sentence")
-    val training = MLUtils.idfFeatures(trainingData).select("label", "features")
+      (1, "Hi I heard about Spark", 0.0),
+      (2, "I wish Java could use case classes", 0.0),
+      (3, "Logistic regression models are neat", 1.0)
+    )).toDF("id", "text","label")
+    val training = MLUtils.idfFeatures(trainingData, numFeatures).select("label", "features")
 
     val lr = new LogisticRegression()
       .setMaxIter(10)
-      .setRegParam(0.3)
-      .setElasticNetParam(0.8)
+      .setRegParam(0.001)
 
     lr.fit(training).write.overwrite().save(path)
 
     val testData = spark.createDataFrame(Seq(
-      (0.0, "Hi I'd like spark"),
-      (0.0, "I wish Java could use goland"),
-      (0.0, "Linear regression models are neat"),
-      (0.0, "Logistic regression models are neat")
-    )).toDF("label", "sentence")
-    val test = MLUtils.idfFeatures(testData).select("features")
+      (1, "Hi I'd like spark"),
+      (2, "I wish Java could use goland"),
+      (3, "Linear regression models are neat"),
+      (4, "Logistic regression models are neat")
+    )).toDF("id", "text")
+    val test = MLUtils.idfFeatures(testData, numFeatures).select("features")
 
     val lrModel = LogisticRegressionModel.load(path)
     val result = lrModel.transform(test)
