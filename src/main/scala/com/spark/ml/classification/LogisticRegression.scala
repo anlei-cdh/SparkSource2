@@ -24,7 +24,7 @@ object LogisticRegression {
       (2, "I wish Java could use case classes", 0.0),
       (3, "Logistic regression models are neat", 1.0)
     )).toDF("id", "text", "label")
-    val training = MLUtils.hashingFeatures(trainingDataFrame, numFeatures).select("label", "features")
+    val training = MLUtils.idfFeatures(trainingDataFrame, numFeatures).select("label", "features")
 
     val lr = new LogisticRegression()
       .setMaxIter(10)
@@ -38,7 +38,7 @@ object LogisticRegression {
       (3, "Linear regression models are neat"),
       (4, "Logistic regression models are neat")
     )).toDF("id", "text")
-    val test = MLUtils.hashingFeatures(testDataFrame, numFeatures).select("features")
+    val test = MLUtils.idfFeatures(testDataFrame, numFeatures).select("features")
 
     val lrModel = LogisticRegressionModel.load(path)
     val result = lrModel.transform(test)
