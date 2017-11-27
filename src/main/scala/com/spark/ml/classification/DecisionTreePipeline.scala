@@ -1,10 +1,8 @@
 package com.spark.ml.classification
 
-import org.apache.spark.ml.Pipeline
-import org.apache.spark.ml.classification.DecisionTreeClassificationModel
-import org.apache.spark.ml.classification.DecisionTreeClassifier
-import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
-import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
+import org.apache.spark.ml.{Pipeline, PipelineModel}
+import org.apache.spark.ml.classification.LogisticRegression
+import org.apache.spark.ml.feature.{HashingTF, Tokenizer}
 import org.apache.spark.sql.SparkSession
 
 object DecisionTreePipeline {
@@ -12,60 +10,50 @@ object DecisionTreePipeline {
   def main(args: Array[String]): Unit = {
 
     val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
-    
-    // Load the data stored in LIBSVM format as a DataFrame.
-    val data = spark.read.format("libsvm").load("data/mllib/sample_libsvm_data.txt")
 
-    // Index labels, adding metadata to the label column.
-    // Fit on whole dataset to include all labels in index.
-    val labelIndexer = new StringIndexer()
-      .setInputCol("label")
-      .setOutputCol("indexedLabel")
-      .fit(data)
-    // Automatically identify categorical features, and index them.
-    val featureIndexer = new VectorIndexer()
-      .setInputCol("features")
-      .setOutputCol("indexedFeatures")
-      .setMaxCategories(4) // features with > 4 distinct values are treated as continuous.
-      .fit(data)
+    val path = "model/lr"
+    val numFeatures = 10000
 
-    // Split the data into training and test sets (30% held out for testing).
-    val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
+    val trainingData = spark.createDataFrame(Seq(
+      (1, "Hi I heard about Spark", 0.0),
+      (2, "I wish Java could use case classes", 0.0),
+      (3, "Logistic regression models are neat", 1.0)
+    )).toDF("id", "text","label")
 
-    // Train a DecisionTree model.
-    val dt = new DecisionTreeClassifier()
-      .setLabelCol("indexedLabel")
-      .setFeaturesCol("indexedFeatures")
+    /**
+      * 分词
+      */
+    val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("words")
+    /**
+      * 向量化
+      */
+    val hashingTF = new HashingTF().setInputCol(tokenizer.getOutputCol).setOutputCol("features").setNumFeatures(numFeatures)
+    /**
+      * TF-IDF 管道使用这个特征不准确
+      */
+    // val idf = new IDF().setInputCol(hashingTF.getOutputCol).setOutputCol("features")
+    /**
+      * 逻辑回归
+      */
+    val lr = new LogisticRegression().setMaxIter(10).setRegParam(0.001)
+    /**
+      * 管道
+      */
+    val pipeline = new Pipeline().setStages(Array(tokenizer, hashingTF, lr))
+    pipeline.fit(trainingData).write.overwrite().save(path)
 
-    // Convert indexed labels back to original labels.
-    val labelConverter = new IndexToString()
-      .setInputCol("prediction")
-      .setOutputCol("predictedLabel")
-      .setLabels(labelIndexer.labels)
+    val testData = spark.createDataFrame(Seq(
+      (1, "Hi I'd like spark"),
+      (2, "I wish Java could use goland"),
+      (3, "Linear regression models are neat"),
+      (4, "Logistic regression models are neat")
+    )).toDF("id", "text")
 
-    // Chain indexers and tree in a Pipeline.
-    val pipeline = new Pipeline()
-      .setStages(Array(labelIndexer, featureIndexer, dt, labelConverter))
+    val pipelineModel = PipelineModel.load(path)
+    val result = pipelineModel.transform(testData)
+    result.show(false)
 
-    // Train model. This also runs the indexers.
-    val model = pipeline.fit(trainingData)
-
-    // Make predictions.
-    val predictions = model.transform(testData)
-
-    // Select example rows to display.
-    predictions.select("predictedLabel", "label", "features").show(5)
-
-    // Select (prediction, true label) and compute test error.
-    val evaluator = new MulticlassClassificationEvaluator()
-      .setLabelCol("indexedLabel")
-      .setPredictionCol("prediction")
-      .setMetricName("accuracy")
-    val accuracy = evaluator.evaluate(predictions)
-    println("Test Error = " + (1.0 - accuracy))
-
-    val treeModel = model.stages(2).asInstanceOf[DecisionTreeClassificationModel]
-    println("Learned classification tree model:\n" + treeModel.toDebugString)
+    spark.stop()
   }
 
 }
