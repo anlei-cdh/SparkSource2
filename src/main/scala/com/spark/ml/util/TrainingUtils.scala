@@ -15,6 +15,14 @@ object TrainingUtils {
     (4, "Logistic regression models are neat")
   )
 
+  val clusteringData = Seq(
+    (1001, "时政 国际 军事 体育 体育 国际 体育"),
+    (1002, "娱乐 体育"),
+    (1003, "体育 体育 国际 体育"),
+    (1004, "军事 体育 体育"),
+    (1005, "时政 财经 财经 体育 军事")
+  )
+
   def main(args: Array[String]): Unit = {
 
   }

@@ -1,5 +1,6 @@
 package com.spark.ml.clustering
 
+import com.spark.ml.util.{MLUtils, TrainingUtils}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.ml.clustering.KMeans
 
@@ -14,20 +15,30 @@ object Clustering {
 
     val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
-    // Loads data.
-    val dataset = spark.read.format("libsvm").load("data/mllib/sample_kmeans_data.txt")
+    val numFeatures = 20
+    /**
+      * 训练集
+      */
+    val clusteringDataFrame = spark.createDataFrame(TrainingUtils.clusteringData).toDF("label", "text")
+    /**
+      * 分词,向量化
+      */
+    val clustering = MLUtils.hashingFeatures(clusteringDataFrame, numFeatures).select("label", "features")
 
-    // Trains a k-means model.
-    val kmeans = new KMeans().setK(2).setSeed(1L)
-    val model = kmeans.fit(dataset)
+    /**
+      * K-means模型
+      */
+    val kmeans = new KMeans().setK(3).setSeed(1L)
+    val model = kmeans.fit(clustering)
 
-    // Evaluate clustering by computing Within Set Sum of Squared Errors.
-    val WSSSE = model.computeCost(dataset)
-    println(s"Within Set Sum of Squared Errors = $WSSSE")
-
-    // Shows the result.
-    println("Cluster Centers: ")
+    /**
+      * 聚类中心
+      */
     model.clusterCenters.foreach(println)
+    /**
+      * 聚类结果
+      */
+    model.transform(clustering).show(false)
 
     spark.stop()
   }
