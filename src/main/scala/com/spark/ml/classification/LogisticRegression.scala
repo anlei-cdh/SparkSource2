@@ -51,11 +51,11 @@ object LogisticRegression {
     /**
       * 读取模型
       */
-    val lrModel = LogisticRegressionModel.load(path)
+    val model = LogisticRegressionModel.load(path)
     /**
       * 分类结果
       */
-    val result = lrModel.transform(test)
+    val result = model.transform(test)
 
     result.show(false)
 
