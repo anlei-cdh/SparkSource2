@@ -31,7 +31,8 @@ object RandomForest {
       * 随机森林模型
       */
     val rf = new RandomForestClassifier()
-      .setNumTrees(50)
+      .setSubsamplingRate(0.8) // 1.0
+      .setNumTrees(1) // 10
     /**
       * 保存模型
       */
