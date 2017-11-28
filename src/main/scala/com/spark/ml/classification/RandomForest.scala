@@ -1,7 +1,7 @@
 package com.spark.ml.classification
 
 import com.spark.ml.util.{MLUtils, TrainingUtils}
-import org.apache.spark.ml.classification.{DecisionTreeClassificationModel, DecisionTreeClassifier}
+import org.apache.spark.ml.classification.{RandomForestClassifier, RandomForestClassificationModel}
 import org.apache.spark.sql.SparkSession
 
 /**
@@ -15,7 +15,7 @@ object RandomForest {
 
     val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
-    val path = "model/dt"
+    val path = "model/rf"
     val numFeatures = 10000
 
     /**
@@ -28,13 +28,14 @@ object RandomForest {
     val training = MLUtils.idfFeatures(trainingDataFrame, numFeatures).select("label", "features")
 
     /**
-      * 决策树模型
+      * 随机森林模型
       */
-    val dt = new DecisionTreeClassifier()
+    val rf = new RandomForestClassifier()
+      .setNumTrees(50)
     /**
       * 保存模型
       */
-    dt.fit(training).write.overwrite().save(path)
+    rf.fit(training).write.overwrite().save(path)
 
     /**
       * 测试集
@@ -47,7 +48,7 @@ object RandomForest {
     /**
       * 读取模型
       */
-    val model = DecisionTreeClassificationModel.load(path)
+    val model = RandomForestClassificationModel.load(path)
     /**
       * 分类结果
       */
