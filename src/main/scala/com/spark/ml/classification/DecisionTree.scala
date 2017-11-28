@@ -23,9 +23,9 @@ object DecisionTree {
       */
     val trainingDataFrame = spark.createDataFrame(TrainingUtils.trainingData).toDF("id", "text", "label")
     /**
-      * 分词,向量化,IDF
+      * 分词,向量化
       */
-    val training = MLUtils.idfFeatures(trainingDataFrame, numFeatures).select("label", "features")
+    val training = MLUtils.hashingFeatures(trainingDataFrame, numFeatures).select("label", "features")
 
     /**
       * 决策树模型
@@ -41,9 +41,9 @@ object DecisionTree {
       */
     val testDataFrame = spark.createDataFrame(TrainingUtils.testData).toDF("id", "text")
     /**
-      * 分词,向量化,IDF
+      * 分词,向量化
       */
-    val test = MLUtils.idfFeatures(testDataFrame, numFeatures).select("features")
+    val test = MLUtils.hashingFeatures(testDataFrame, numFeatures).select("features")
     /**
       * 读取模型
       */
