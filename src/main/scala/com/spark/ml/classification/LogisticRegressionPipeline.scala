@@ -1,7 +1,8 @@
 package com.spark.ml.classification
 
+import com.spark.ml.util.TrainingUtils
 import org.apache.spark.ml.{Pipeline, PipelineModel}
-import org.apache.spark.ml.classification.{LogisticRegression}
+import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.feature.{HashingTF, Tokenizer}
 import org.apache.spark.sql.SparkSession
 
@@ -14,12 +15,10 @@ object LogisticRegressionPipeline {
     val path = "model/lr"
     val numFeatures = 10000
 
-    val trainingData = spark.createDataFrame(Seq(
-      (1, "Hi I heard about Spark", 0.0),
-      (2, "I wish Java could use case classes", 0.0),
-      (3, "Logistic regression models are neat", 1.0)
-    )).toDF("id", "text","label")
-
+    /**
+      * 训练集
+      */
+    val trainingDataFrame = spark.createDataFrame(TrainingUtils.trainingData).toDF("id", "text","label")
     /**
       * 分词
       */
@@ -37,20 +36,27 @@ object LogisticRegressionPipeline {
       */
     val lr = new LogisticRegression().setMaxIter(10).setRegParam(0.001)
     /**
-      * 管道
+      * 管道 - 分词,向量化,逻辑回归
       */
     val pipeline = new Pipeline().setStages(Array(tokenizer, hashingTF, lr))
-    pipeline.fit(trainingData).write.overwrite().save(path)
+    /**
+      * 保存模型 - 管道方式
+      */
+    pipeline.fit(trainingDataFrame).write.overwrite().save(path)
 
-    val testData = spark.createDataFrame(Seq(
-      (1, "Hi I'd like spark"),
-      (2, "I wish Java could use goland"),
-      (3, "Linear regression models are neat"),
-      (4, "Logistic regression models are neat")
-    )).toDF("id", "text")
-
+    /**
+      * 测试集
+      */
+    val testDataFrame = spark.createDataFrame(TrainingUtils.testData).toDF("id", "text")
+    /**
+      * 读取模型 - 管道方式
+      */
     val pipelineModel = PipelineModel.load(path)
-    val result = pipelineModel.transform(testData)
+    /**
+      * 分类结果 - 管道方式
+      */
+    val result = pipelineModel.transform(testDataFrame)
+
     result.show(false)
 
     spark.stop()

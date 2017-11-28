@@ -1,6 +1,6 @@
 package com.spark.ml.classification
 
-import com.spark.ml.util.MLUtils
+import com.spark.ml.util.{MLUtils, TrainingUtils}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.classification.LogisticRegressionModel
@@ -19,28 +19,42 @@ object LogisticRegression {
     val path = "model/lr"
     val numFeatures = 10000
 
-    val trainingDataFrame = spark.createDataFrame(Seq(
-      (1, "Hi I heard about Spark", 0.0),
-      (2, "I wish Java could use case classes", 0.0),
-      (3, "Logistic regression models are neat", 1.0)
-    )).toDF("id", "text", "label")
+    /**
+      * 训练集
+      */
+    val trainingDataFrame = spark.createDataFrame(TrainingUtils.trainingData).toDF("id", "text", "label")
+    /**
+      * 分词,向量化,IDF
+      */
     val training = MLUtils.idfFeatures(trainingDataFrame, numFeatures).select("label", "features")
 
+    /**
+      * 逻辑回归模型
+      */
     val lr = new LogisticRegression()
       .setMaxIter(10)
       .setRegParam(0.001)
-
+      .setFamily("multinomial") // binomial
+    /**
+      * 保存模型
+      */
     lr.fit(training).write.overwrite().save(path)
 
-    val testDataFrame = spark.createDataFrame(Seq(
-      (1, "Hi I'd like spark"),
-      (2, "I wish Java could use goland"),
-      (3, "Linear regression models are neat"),
-      (4, "Logistic regression models are neat")
-    )).toDF("id", "text")
+    /**
+      * 测试集
+      */
+    val testDataFrame = spark.createDataFrame(TrainingUtils.testData).toDF("id", "text")
+    /**
+      * 分词,向量化,IDF
+      */
     val test = MLUtils.idfFeatures(testDataFrame, numFeatures).select("features")
-
+    /**
+      * 读取模型
+      */
     val lrModel = LogisticRegressionModel.load(path)
+    /**
+      * 分类结果
+      */
     val result = lrModel.transform(test)
 
     result.show(false)
