@@ -13,6 +13,7 @@ object CollaborativeFiltering {
 
     val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
+    spark.stop()
   }
 
 }
