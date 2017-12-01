@@ -3,14 +3,14 @@ package com.spark.ml.recommendation
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.ml.recommendation.ALS
 
-case class Rating(userId: Int, movieId: Int, rating: Float, timestamp: Long)
-
 /**
   * Created by AnLei on 2017/11/14.
   *
   * CollaborativeFiltering
   */
 object CollaborativeFiltering {
+
+  case class Rating(userId: Int, movieId: Int, rating: Float, timestamp: Long)
 
   def parseRating(str: String): Rating = {
     val fields = str.split("::")
