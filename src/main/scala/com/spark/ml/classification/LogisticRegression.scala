@@ -34,7 +34,7 @@ object LogisticRegression {
     val lr = new LogisticRegression()
       .setMaxIter(10)
       .setRegParam(0.001)
-      .setFamily("multinomial") // binomial
+      .setFamily("multinomial") // binomial | multinomial
     /**
       * 保存模型
       */
