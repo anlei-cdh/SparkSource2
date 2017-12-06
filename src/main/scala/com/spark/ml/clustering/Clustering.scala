@@ -15,11 +15,11 @@ object Clustering {
 
     val spark = SparkSession.builder().master("local").appName(s"${this.getClass.getSimpleName}").getOrCreate()
 
-    val numFeatures = 20
+    val numFeatures = 50
     /**
       * 训练集
       */
-    val clusteringDataFrame = spark.createDataFrame(TrainingUtils.clusteringData).toDF("label", "text")
+    val clusteringDataFrame = spark.createDataFrame(TrainingUtils.clusteringData).toDF("label", "text") // clusteringData2
     /**
       * 分词,向量化
       */
