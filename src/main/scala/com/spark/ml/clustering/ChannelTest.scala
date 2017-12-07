@@ -1,6 +1,7 @@
 package com.spark.ml.clustering
 
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.sum
 
 object ChannelTest {
 
@@ -23,11 +24,13 @@ object ChannelTest {
 
     val explode = df.selectExpr("prediction", "explode(textlist) AS text")
 
-    explode.show(false)
+//    explode.show(false)
 
-    explode.groupBy("prediction").count().show(false)
+    val groupCount = explode.groupBy("prediction","text").count()
+    groupCount.show(false)
 
-    explode.groupBy("prediction","text").count().show(false)
+    val groupCount2 = groupCount.groupBy("prediction")agg(sum("count") as "count")
+    groupCount2.show(false)
 
     spark.stop()
   }
