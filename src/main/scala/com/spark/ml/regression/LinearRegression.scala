@@ -49,6 +49,8 @@ object LinearRegression {
 
     val testDataFrame = spark.createDataFrame(testData).toDF("id", "features")
     lineModel.transform(testDataFrame).show(false)
+    
+    spark.stop()
   }
 
 }
