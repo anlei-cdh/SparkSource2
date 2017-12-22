@@ -37,8 +37,8 @@ object CollaborativeFiltering {
 
     model.setColdStartStrategy("drop")
 
-    val userRecs = model.recommendForAllUsers(10)
-    val movieRecs = model.recommendForAllItems(10)
+    val userRecs = model.recommendForAllUsers(4)
+    val movieRecs = model.recommendForAllItems(4)
 
     userRecs.show(false)
     movieRecs.show(false)
