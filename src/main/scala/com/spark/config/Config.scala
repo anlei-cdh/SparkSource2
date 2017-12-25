@@ -14,4 +14,6 @@ object Config {
 
   val REDIS_SERVER: String = "ha01"
   val REDIS_PORT: Int = 6379
+
+  val testgit = true;
 }
