@@ -10,6 +10,7 @@ import org.apache.spark.ml.recommendation.ALS
   */
 object CollaborativeFiltering {
 
+  val count = 5
   case class Rating(userId: Int, movieId: Int, rating: Float, timestamp: Long)
 
   def parseRating(str: String): Rating = {
@@ -37,11 +38,11 @@ object CollaborativeFiltering {
 
     model.setColdStartStrategy("drop")
 
-    val userRecs = model.recommendForAllUsers(4)
-    val movieRecs = model.recommendForAllItems(4)
+    val userRecs = model.recommendForAllUsers(count)
+    val movieRecs = model.recommendForAllItems(count)
 
-    userRecs.show(false)
-    movieRecs.show(false)
+    userRecs.orderBy("userId").show(false)
+    movieRecs.orderBy("movieId").show(false)
 
     spark.stop()
   }
