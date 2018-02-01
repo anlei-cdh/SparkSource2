@@ -54,23 +54,34 @@ object LocalALS {
     math.sqrt(sumSqs / (M.toDouble * U.toDouble))
   }
 
+  /**
+    * 固定其中一个用户来更新所有的电影向量
+    * @param i 第几个
+    * @param m 相当于第几个电影
+    * @param us 用户矩阵
+    * @param R 评分矩阵
+    * @return
+    */
   def updateMovie(i: Int, m: RealVector, us: Array[RealVector], R: RealMatrix) : RealVector = {
-    var XtX: RealMatrix = new Array2DRowRealMatrix(F, F)
-    var Xty: RealVector = new ArrayRealVector(F)
+    var XtX: RealMatrix = new Array2DRowRealMatrix(F, F) // 矩阵
+    var Xty: RealVector = new ArrayRealVector(F) // 向量
     // For each user that rated the movie
+    /**
+      * 迭代用户矩阵
+      */
     for (j <- 0 until U) {
-      val u = us(j)
+      val u = us(j) // 单个用户
       // Add u * u^t to XtX
-      XtX = XtX.add(u.outerProduct(u))
+      XtX = XtX.add(u.outerProduct(u)) // 用户矩阵
       // Add u * rating to Xty
-      Xty = Xty.add(u.mapMultiply(R.getEntry(i, j)))
+      Xty = Xty.add(u.mapMultiply(R.getEntry(i, j))) // 评分矩阵 第i个电影的所有用户评分
     }
     // Add regularization coefficients to diagonal terms
     for (d <- 0 until F) {
       XtX.addToEntry(d, d, LAMBDA * U)
     }
     // Solve it with Cholesky
-    new CholeskyDecomposition(XtX).getSolver.solve(Xty)
+    new CholeskyDecomposition(XtX).getSolver.solve(Xty) // 矩阵分解
   }
 
   def updateUser(j: Int, u: RealVector, ms: Array[RealVector], R: RealMatrix) : RealVector = {
@@ -120,14 +131,14 @@ object LocalALS {
     val R = generateR()
 
     // Initialize m and u randomly
-    var ms = Array.fill(M)(randomVector(F))
-    var us = Array.fill(U)(randomVector(F))
+    var ms = Array.fill(M)(randomVector(F)) // 电影矩阵 M电影的数量 F相当于K值
+    var us = Array.fill(U)(randomVector(F)) // 用户矩阵 U用户的数量 F相当于K值
 
     // Iteratively update movies then users
-    for (iter <- 1 to ITERATIONS) {
+    for (iter <- 1 to ITERATIONS) { // ITERATIONS 迭代次数
       println(s"Iteration $iter:")
-      ms = (0 until M).map(i => updateMovie(i, ms(i), us, R)).toArray
-      us = (0 until U).map(j => updateUser(j, us(j), ms, R)).toArray
+      ms = (0 until M).map(i => updateMovie(i, ms(i), us, R)).toArray // ms(i)相当于第几个电影
+      us = (0 until U).map(j => updateUser(j, us(j), ms, R)).toArray // us(j)相当于第几个用户
       println("RMSE = " + rmse(R, ms, us))
       println()
     }
