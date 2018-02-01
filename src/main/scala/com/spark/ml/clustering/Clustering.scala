@@ -28,7 +28,7 @@ object Clustering {
     /**
       * K-means模型
       */
-    val kmeans = new KMeans().setK(3).setSeed(1L)
+    val kmeans = new KMeans().setK(3).setSeed(1L) // .setInitMode("k-means||")
     val model = kmeans.fit(clustering)
 
     /**
