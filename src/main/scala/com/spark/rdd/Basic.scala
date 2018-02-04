@@ -13,7 +13,9 @@ object Basic {
     val sc = new SparkContext(conf)
     val listRdd = sc.parallelize(List(1,2,3),1)
     listRdd.map(x => x * x).foreach(print(_))
+    println()
     listRdd.filter(_ % 2 == 0).foreach(print(_))
+    println()
     listRdd.flatMap(x => 1 to x).foreach(print(_))
     sc.stop()
   }
