@@ -13,32 +13,42 @@ object KeyValue {
     val sc = new SparkContext(conf)
     val pets = sc.parallelize(List(("cat", 1),("dog", 1),("cat", 2)))
 
-    // reduceByKey
+    /**
+      * reduceByKey
+      */
     pets.reduceByKey(_+_).foreach(println(_))
     println()
-    // groupByKey
+    /**
+      * groupByKey
+      */
     pets.groupByKey().foreach(println(_))
     println()
-    // groupByKey map
-    pets.groupByKey().map(m => {
-      val word = m._1
-      var count = 0
-      m._2.foreach(item => {
-        count += item
-      })
-      (word, count)
-    }).foreach(println(_))
-    println()
-    // sortByKey
+    /**
+      * sortByKey
+      */
     pets.sortByKey().foreach(println(_))
     println()
-    // countByKey
-    pets.countByKey().foreach(println(_))
+    /**
+      * mapValues
+      * 针对(Key,Value)型数据中的Value进行Map操作，而不对Key进行处理。
+      */
+    pets.mapValues(x => x + "_").foreach(println(_))
     println()
-    // countByValue
-    pets.countByValue().foreach(println(_))
+    /**
+      * combineByKey
+      */
+    pets.combineByKey(
+      x => x,
+      (x: Int, y: Int) => x + y,
+      (x: Int, y: Int) => x + y
+    ).foreach(println(_))
     println()
-    
+    /**
+      * Cogroup
+      */
+    val pets2 = sc.parallelize(List(("cat", 3),("dog", 4),("pig", 5)))
+    pets.cogroup(pets2).foreach(println(_))
+
     sc.stop()
   }
 
